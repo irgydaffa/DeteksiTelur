@@ -1,0 +1,21 @@
+{
+    "python.analysis.extraPaths": ["C:/xampp/htdocs/tugas_besar/yolov5"],
+    "github.copilot.enable": {
+        "markdown": true,
+        "javascript": true,
+        "php": true,
+        "plaintext": false,
+        "yaml": false
+    },
+    "github.copilot.editor.enableAutoCompletions": true,
+    "editor.inlineSuggest.enabled": true,
+
+    "editor.formatOnSave": false,
+    "editor.minimap.enabled": false,
+    "editor.scrollBeyondLastLine": false,
+    "editor.semanticHighlighting.enabled": false,
+
+    "typescript.disableAutomaticTypeAcquisition": true,
+    "php.suggest.basic": false,
+    "php.validate.enable": false
+}

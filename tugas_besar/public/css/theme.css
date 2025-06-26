@@ -1,0 +1,53 @@
+:root {
+    --egg-orange: #F8A057;
+    --egg-orange-dark: #E58B3D;
+    --egg-orange-light: rgba(248, 160, 87, 0.1);
+  }
+  
+  /* Warna utama */
+  .bg-egg-orange {
+    background-color: #F8A057;
+  }
+  
+  .text-egg-orange {
+    color: #F8A057;
+  }
+  
+  .border-egg-orange {
+    border-color: #F8A057;
+  }
+  
+  /* Warna dengan opacity */
+  .bg-egg-orange-10 {
+    background-color: rgba(248, 160, 87, 0.1);
+  }
+  
+  .bg-egg-orange-50 {
+    background-color: rgba(248, 160, 87, 0.5);
+  }
+  
+  /* Hover state */
+  .hover\:bg-egg-orange:hover {
+    background-color: #F8A057;
+  }
+  
+  .hover\:bg-egg-orange-dark:hover {
+    background-color: #E58B3D;
+  }
+  
+  .hover\:text-egg-orange:hover {
+    color: #F8A057;
+  }
+  
+  .hover\:bg-egg-orange-10:hover {
+    background-color: rgba(248, 160, 87, 0.1);
+  }
+  
+  /* Focus state */
+  .focus\:ring-egg-orange:focus {
+    --tw-ring-color: rgba(248, 160, 87, 0.5);
+  }
+  
+  .focus\:border-egg-orange:focus {
+    border-color: #F8A057;
+  }
