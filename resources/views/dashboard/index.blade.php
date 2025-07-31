@@ -107,7 +107,8 @@
                         </div>
                         <p class="text-lg font-bold text-gray-800">{{ $eggCounts['MUTU 1'] }}</p>
                         <div class="text-xs text-gray-500 mt-1">
-                            {{ $totalEggs > 0 ? round($eggCounts['MUTU 1'] / $totalEggs * 100, 1) : 0 }}% dari total</div>
+                            {{ $eggCounts['MUTU 1'] }} total deteksi bulan ini
+                        </div>
                     </div>
 
                     <div class="border rounded-lg p-3 hover:bg-gray-50 transition-colors">
@@ -119,7 +120,8 @@
                         </div>
                         <p class="text-lg font-bold text-gray-800">{{ $eggCounts['MUTU 2'] }}</p>
                         <div class="text-xs text-gray-500 mt-1">
-                            {{ $totalEggs > 0 ? round($eggCounts['MUTU 2'] / $totalEggs * 100, 1) : 0 }}% dari total</div>
+                            {{ $eggCounts['MUTU 2'] }} total deteksi bulan ini
+                        </div>
                     </div>
 
                     <div class="border rounded-lg p-3 hover:bg-gray-50 transition-colors">
@@ -131,7 +133,8 @@
                         </div>
                         <p class="text-lg font-bold text-gray-800">{{ $eggCounts['MUTU 3'] }}</p>
                         <div class="text-xs text-gray-500 mt-1">
-                            {{ $totalEggs > 0 ? round($eggCounts['MUTU 3'] / $totalEggs * 100, 1) : 0 }}% dari total</div>
+                            {{ $eggCounts['MUTU 3'] }} total deteksi bulan ini
+                        </div>
                     </div>
                 </div>
             </div>
@@ -307,10 +310,10 @@
 
                         const container = document.getElementById('detections-container');
                         container.innerHTML = `
-                                            <div class="loading-spinner">
-                                                <div class="spinner"></div>
-                                            </div>
-                                        `;
+                                                <div class="loading-spinner">
+                                                    <div class="spinner"></div>
+                                                </div>
+                                            `;
 
                         fetchDetections(url);
                     });
@@ -339,14 +342,14 @@
                     .catch(error => {
                         console.error('Error fetching detections:', error);
                         document.getElementById('detections-container').innerHTML = `
-                                            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                                                <p class="font-bold">Error</p>
-                                                <p>Terjadi kesalahan saat memuat data.</p>
-                                                <button onclick="fetchDetections('${url}')" class="mt-2 bg-egg-orange hover:bg-egg-orange-dark text-white font-bold py-1 px-3 rounded transition duration-200">
-                                                    Coba Lagi
-                                                </button>
-                                            </div>
-                                        `;
+                                                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                                                    <p class="font-bold">Error</p>
+                                                    <p>Terjadi kesalahan saat memuat data.</p>
+                                                    <button onclick="fetchDetections('${url}')" class="mt-2 bg-egg-orange hover:bg-egg-orange-dark text-white font-bold py-1 px-3 rounded transition duration-200">
+                                                        Coba Lagi
+                                                    </button>
+                                                </div>
+                                            `;
                     });
             }
 
@@ -372,10 +375,10 @@
                         // Show loading indicator
                         const container = document.getElementById('users-container');
                         container.innerHTML = `
-                                            <div class="loading-spinner">
-                                                <div class="spinner"></div>
-                                            </div>
-                                        `;
+                                                <div class="loading-spinner">
+                                                    <div class="spinner"></div>
+                                                </div>
+                                            `;
 
                         // Fetch data via AJAX
                         fetchUsers(url);
@@ -412,14 +415,14 @@
                     .catch(error => {
                         console.error('Error fetching users:', error);
                         document.getElementById('users-container').innerHTML = `
-                                            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                                                <p class="font-bold">Error</p>
-                                                <p>Terjadi kesalahan saat memuat data pengguna.</p>
-                                                <button onclick="fetchUsers('${url}')" class="mt-2 bg-egg-orange hover:bg-egg-orange-dark text-white font-bold py-1 px-3 rounded transition duration-200">
-                                                    Coba Lagi
-                                                </button>
-                                            </div>
-                                        `;
+                                                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                                                    <p class="font-bold">Error</p>
+                                                    <p>Terjadi kesalahan saat memuat data pengguna.</p>
+                                                    <button onclick="fetchUsers('${url}')" class="mt-2 bg-egg-orange hover:bg-egg-orange-dark text-white font-bold py-1 px-3 rounded transition duration-200">
+                                                        Coba Lagi
+                                                    </button>
+                                                </div>
+                                            `;
                     });
             }
         </script>

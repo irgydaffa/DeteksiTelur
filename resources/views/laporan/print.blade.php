@@ -17,35 +17,43 @@
             border-bottom: 1px solid #ddd;
             padding-bottom: 10px;
         }
+
         .title {
             font-size: 18px;
             font-weight: bold;
             margin-bottom: 5px;
         }
+
         .subtitle {
             font-size: 14px;
             margin-bottom: 5px;
         }
+
         .info {
             margin-bottom: 15px;
         }
+
         .info-item {
             margin-bottom: 5px;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 15px;
         }
+
         th,
         td {
             border: 1px solid #ddd;
             padding: 5px;
         }
+
         th {
             background-color: #f2f2f2;
             text-align: left;
         }
+
         .summary {
             margin-top: 15px;
         }
@@ -61,6 +69,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         <div class="title">Laporan Deteksi Telur</div>
@@ -73,10 +82,10 @@
         <div class="info-item">
             <strong>Dicetak pada:</strong> {{ now()->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB
         </div>
-        @if($kategori != 'semua')
-        <div class="info-item">
-            <strong>Filter Kategori:</strong> {{ $kategori }}
-        </div>
+        @if(isset($kategori) && $kategori != 'semua')
+            <div class="info-item">
+                <strong>Filter Kategori:</strong> {{ $kategori }}
+            </div>
         @endif
     </div>
     <div class="summary">
@@ -92,28 +101,28 @@
             <tr>
                 <td>{{ $detections->count() }}</td>
                 <td>
-                    @if($kategori == 'semua' || $kategori == 'MUTU 1')
+                    @if(!isset($kategori) || $kategori == 'semua' || $kategori == 'MUTU 1')
                         {{ $totalMutu1 }}
                     @else
                         0
                     @endif
                 </td>
                 <td>
-                    @if($kategori == 'semua' || $kategori == 'MUTU 2')
+                    @if(!isset($kategori) || $kategori == 'semua' || $kategori == 'MUTU 2')
                         {{ $totalMutu2 }}
                     @else
                         0
                     @endif
                 </td>
                 <td>
-                    @if($kategori == 'semua' || $kategori == 'MUTU 3')
+                    @if(!isset($kategori) || $kategori == 'semua' || $kategori == 'MUTU 3')
                         {{ $totalMutu3 }}
                     @else
                         0
                     @endif
                 </td>
                 <td>
-                    @if($kategori == 'semua')
+                    @if(!isset($kategori) || $kategori == 'semua')
                         {{ $totalMutu1 + $totalMutu2 + $totalMutu3 }}
                     @elseif($kategori == 'MUTU 1')
                         {{ $totalMutu1 }}
@@ -149,28 +158,28 @@
                         <td>{{ $detection->nama_file }}</td>
                         <td>{{ $detection->user->nama ?? '-' }}</td>
                         <td>
-                            @if($kategori == 'semua' || $kategori == 'MUTU 1')
+                            @if(!isset($kategori) || $kategori == 'semua' || $kategori == 'MUTU 1')
                                 {{ $detection->jumlah_mutu1 }}
                             @else
                                 0
                             @endif
                         </td>
                         <td>
-                            @if($kategori == 'semua' || $kategori == 'MUTU 2')
+                            @if(!isset($kategori) || $kategori == 'semua' || $kategori == 'MUTU 2')
                                 {{ $detection->jumlah_mutu2 }}
                             @else
                                 0
                             @endif
                         </td>
                         <td>
-                            @if($kategori == 'semua' || $kategori == 'MUTU 3')
+                            @if(!isset($kategori) || $kategori == 'semua' || $kategori == 'MUTU 3')
                                 {{ $detection->jumlah_mutu3 }}
                             @else
                                 0
                             @endif
                         </td>
                         <td>
-                            @if($kategori == 'semua')
+                            @if(!isset($kategori) || $kategori == 'semua')
                                 {{ $detection->jumlah_mutu1 + $detection->jumlah_mutu2 + $detection->jumlah_mutu3 }}
                             @elseif($kategori == 'MUTU 1')
                                 {{ $detection->jumlah_mutu1 }}
@@ -191,37 +200,37 @@
                 <tr>
                     <td colspan="4" style="text-align: right;"><strong>Total:</strong></td>
                     <td><strong>
-                        @if($kategori == 'semua' || $kategori == 'MUTU 1')
-                            {{ $totalMutu1 }}
-                        @else
-                            0
-                        @endif
-                    </strong></td>
+                            @if(!isset($kategori) || $kategori == 'semua' || $kategori == 'MUTU 1')
+                                {{ $totalMutu1 }}
+                            @else
+                                0
+                            @endif
+                        </strong></td>
                     <td><strong>
-                        @if($kategori == 'semua' || $kategori == 'MUTU 2')
-                            {{ $totalMutu2 }}
-                        @else
-                            0
-                        @endif
-                    </strong></td>
+                            @if(!isset($kategori) || $kategori == 'semua' || $kategori == 'MUTU 2')
+                                {{ $totalMutu2 }}
+                            @else
+                                0
+                            @endif
+                        </strong></td>
                     <td><strong>
-                        @if($kategori == 'semua' || $kategori == 'MUTU 3')
-                            {{ $totalMutu3 }}
-                        @else
-                            0
-                        @endif
-                    </strong></td>
+                            @if(!isset($kategori) || $kategori == 'semua' || $kategori == 'MUTU 3')
+                                {{ $totalMutu3 }}
+                            @else
+                                0
+                            @endif
+                        </strong></td>
                     <td><strong>
-                        @if($kategori == 'semua')
-                            {{ $totalMutu1 + $totalMutu2 + $totalMutu3 }}
-                        @elseif($kategori == 'MUTU 1')
-                            {{ $totalMutu1 }}
-                        @elseif($kategori == 'MUTU 2')
-                            {{ $totalMutu2 }}
-                        @elseif($kategori == 'MUTU 3')
-                            {{ $totalMutu3 }}
-                        @endif
-                    </strong></td>
+                            @if(!isset($kategori) || $kategori == 'semua')
+                                {{ $totalMutu1 + $totalMutu2 + $totalMutu3 }}
+                            @elseif($kategori == 'MUTU 1')
+                                {{ $totalMutu1 }}
+                            @elseif($kategori == 'MUTU 2')
+                                {{ $totalMutu2 }}
+                            @elseif($kategori == 'MUTU 3')
+                                {{ $totalMutu3 }}
+                            @endif
+                        </strong></td>
                 </tr>
             </tfoot>
         </table>
@@ -230,4 +239,5 @@
         <p>Ditandatangani oleh: _______________________</p>
     </div>
 </body>
+
 </html>

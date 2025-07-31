@@ -23,12 +23,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/detect/process', [DeteksiController::class, 'detect'])->name('detect.process');
     Route::get('/webcam', [DeteksiController::class, 'webcam'])->name('webcam');
     Route::post('/webcam/detect', [DeteksiController::class, 'webcamDetect'])->name('webcam.detect');
-    
+    Route::get('/deteksi/{id}', [DeteksiController::class, 'show'])->name('deteksi.detail');
+
 
     // Laporan routes
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
     Route::get('/laporan/print', [LaporanController::class, 'printReport'])->name('laporan.print');
-    Route::get('/laporan/export/excel', [LaporanController::class, 'exportExcel'])->name('laporan.export.excel');
+    // Route::get('/laporan/export/excel', [LaporanController::class, 'exportExcel'])->name('laporan.export.excel');
     Route::get('/laporan/export/pdf', [LaporanController::class, 'exportPdf'])->name('laporan.export.pdf');
 });
 

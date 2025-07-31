@@ -11,53 +11,64 @@
                 class="py-2 px-4 border-b border-gray-200 bg-egg-orange-10 text-left text-sm font-semibold text-egg-orange">
                 Tanggal</th>
             <th
-                class="py-2 px-4 border-b border-gray-200 bg-egg-orange-10 text-left text-sm font-semibold text-egg-orange">
-                Kategori</th>
+                class="py-2 px-4 border-b border-gray-200 bg-egg-orange-10 text-center text-sm font-semibold text-egg-orange">
+                Mutu 1</th>
             <th
                 class="py-2 px-4 border-b border-gray-200 bg-egg-orange-10 text-center text-sm font-semibold text-egg-orange">
-                Jumlah Telur</th>
+                Mutu 2</th>
+            <th
+                class="py-2 px-4 border-b border-gray-200 bg-egg-orange-10 text-center text-sm font-semibold text-egg-orange">
+                Mutu 3</th>
+            <th
+                class="py-2 px-4 border-b border-gray-200 bg-egg-orange-10 text-center text-sm font-semibold text-egg-orange">
+                Aksi</th>
         </tr>
     </thead>
     <tbody>
         @forelse($detections as $detection)
             <tr class="hover:bg-egg-orange-10">
                 <td class="py-2 px-4 border-b border-gray-200 text-sm">
-                    {{ ($detections->currentPage() - 1) * $detections->perPage() + $loop->iteration }}</td>
+                    {{ ($detections->currentPage() - 1) * $detections->perPage() + $loop->iteration }}
+                </td>
                 <td class="py-2 px-4 border-b border-gray-200 text-sm">
                     {{ $detection->user->nama ?? Auth::user()->nama }}
                 </td>
                 <td class="py-2 px-4 border-b border-gray-200 text-sm">
                     {{ $detection->created_at->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB
                 </td>
-                <td class="py-2 px-4 border-b border-gray-200 text-sm">
-                    @if($detection->jumlah_mutu1 > 0)
-                        <span class="px-2 py-1 rounded-full text-xs bg-green-100 text-green-800 inline-block mr-1 mb-1">
-                            MUTU 1
-                        </span>
-                    @endif
-                    @if($detection->jumlah_mutu2 > 0)
-                        <span class="px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-800 inline-block mr-1 mb-1">
-                            MUTU 2
-                        </span>
-                    @endif
-                    @if($detection->jumlah_mutu3 > 0)
-                        <span class="px-2 py-1 rounded-full text-xs bg-red-100 text-red-800 inline-block mr-1 mb-1">
-                            MUTU 3
-                        </span>
-                    @endif
+                <td class="py-2 px-4 border-b border-gray-200 text-sm text-center font-medium">
+                    <span class="text-lg font-bold {{ $detection->jumlah_mutu1 > 0 ? 'text-green-600' : 'text-gray-400' }}">
+                        {{ $detection->jumlah_mutu1 }}
+                    </span>
                 </td>
                 <td class="py-2 px-4 border-b border-gray-200 text-sm text-center font-medium">
-                    {{ $detection->jumlah_mutu1 + $detection->jumlah_mutu2 + $detection->jumlah_mutu3 }}
-                    <div class="text-xs text-gray-500 mt-1">
-                        <span class="text-green-600">{{ $detection->jumlah_mutu1 }}</span> /
-                        <span class="text-yellow-600">{{ $detection->jumlah_mutu2 }}</span> /
-                        <span class="text-red-600">{{ $detection->jumlah_mutu3 }}</span>
-                    </div>
+                    <span
+                        class="text-lg font-bold {{ $detection->jumlah_mutu2 > 0 ? 'text-yellow-600' : 'text-gray-400' }}">
+                        {{ $detection->jumlah_mutu2 }}
+                    </span>
+                </td>
+                <td class="py-2 px-4 border-b border-gray-200 text-sm text-center font-medium">
+                    <span class="text-lg font-bold {{ $detection->jumlah_mutu3 > 0 ? 'text-red-600' : 'text-gray-400' }}">
+                        {{ $detection->jumlah_mutu3 }}
+                    </span>
+                </td>
+                <td class="py-2 px-4 border-b border-gray-200 text-sm text-center">
+                    <a href="{{ route('deteksi.detail', $detection->id) }}"
+                        class="inline-flex items-center px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium rounded-lg transition-colors">
+                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                            </path>
+                        </svg>
+                        Lihat
+                    </a>
                 </td>
             </tr>
         @empty
             <tr>
-                <td colspan="6" class="py-4 text-center text-gray-500">Belum ada deteksi yang dilakukan</td>
+                <td colspan="7" class="py-4 text-center text-gray-500">Belum ada deteksi yang dilakukan</td>
             </tr>
         @endforelse
     </tbody>

@@ -40,7 +40,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(DeteksiTelur::class);
     }
-    
+
     const ROLES = [
         'admin' => 'Admin',
         'petugas' => 'Petugas',

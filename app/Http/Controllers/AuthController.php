@@ -40,7 +40,7 @@ class AuthController extends Controller
         if ($user && Hash::check($password, $user->password)) {
             if ($user->status !== 'aktif') {
                 return redirect()->back()
-                    ->with('error', 'Akun Anda telah dinonaktifkan. Silahkan hubungi administrator.');
+                    ->with('error', 'Akun Anda telah dinonaktifkan. Silahkan hubungi admin.');
             }
 
             

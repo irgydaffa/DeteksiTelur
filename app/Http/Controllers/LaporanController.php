@@ -156,8 +156,29 @@ class LaporanController extends Controller
     {
         $startDate = $request->start_date ? Carbon::parse($request->start_date)->startOfDay() : Carbon::now()->subDays(30)->startOfDay();
         $endDate = $request->end_date ? Carbon::parse($request->end_date)->endOfDay() : Carbon::now()->endOfDay();
+        $kategori = $request->kategori ?? 'semua';
 
-        $detections = DeteksiTelur::whereBetween('created_at', [$startDate, $endDate])->get();
+        $query = DeteksiTelur::whereBetween('created_at', [$startDate, $endDate])
+            ->with('user')
+            ->orderBy('created_at', 'desc');
+
+        // Filter berdasarkan user_id jika ada
+        if ($request->user_id) {
+            $query->where('user_id', $request->user_id);
+        }
+
+        // Filter berdasarkan kategori jika tidak 'semua'
+        if ($kategori !== 'semua') {
+            if ($kategori == 'MUTU 1') {
+                $query->where('jumlah_mutu1', '>', 0);
+            } elseif ($kategori == 'MUTU 2') {
+                $query->where('jumlah_mutu2', '>', 0);
+            } elseif ($kategori == 'MUTU 3') {
+                $query->where('jumlah_mutu3', '>', 0);
+            }
+        }
+
+        $detections = $query->get();
 
         $totalMutu1 = $detections->sum('jumlah_mutu1');
         $totalMutu2 = $detections->sum('jumlah_mutu2');
@@ -169,7 +190,8 @@ class LaporanController extends Controller
             'endDate',
             'totalMutu1',
             'totalMutu2',
-            'totalMutu3'
+            'totalMutu3',
+            'kategori'
         ));
 
         return $pdf->download('laporan-deteksi-telur-' . now()->format('Ymd') . '.pdf');

@@ -52,39 +52,7 @@
                                 </div>
                             </div>
                         @else
-                            @php
-                                $lowConfidence = false;
-                                if (isset($result['detections'])) {
-                                    foreach ($result['detections'] as $detection) {
-                                        if ($detection['confidence'] < 0.5) {
-                                            $lowConfidence = true;
-                                            break;
-                                        }
-                                    }
-                                }
-                            @endphp
-                            
-                            @if($lowConfidence && isset($result['detections']) && count($result['detections']) > 0)
-                                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
-                                    <p class="text-yellow-700 font-medium">Deteksi dengan tingkat kepercayaan rendah (di bawah 50%).</p>
-                                    <div class="text-yellow-600 mt-2 text-sm space-y-1">
-                                        <p><i class="fas fa-info-circle mr-1"></i> Beberapa kemungkinan penyebab:</p>
-                                        <ul class="list-disc list-inside pl-2">
-                                            <li>Pencahayaan tidak optimal</li>
-                                            <li>Telur terlihat sebagian atau posisi kurang ideal</li>
-                                            <li>Resolusi gambar kurang baik</li>
-                                            <li>Terdapat bayangan atau pantulan cahaya</li>
-                                        </ul>
-                                        <p class="pt-1"><i class="fas fa-lightbulb mr-1"></i> Saran perbaikan:</p>
-                                        <ul class="list-disc list-inside pl-2">
-                                            <li>Pastikan pencahayaan merata dan tidak terlalu terang/gelap</li>
-                                            <li>Posisikan telur dengan baik sehingga seluruh bagian terlihat</li>
-                                            <li>Gunakan kamera dengan resolusi yang lebih baik</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            @endif
-                            
+                            <!-- Sekarang semua deteksi yang dikembalikan sudah >= 50% confidence -->
                             @if(isset($result['detection']))
                                 <div class="mb-4">
                                     <h4 class="font-medium text-gray-700 mb-2">Ringkasan:</h4>
@@ -119,6 +87,46 @@
                                                 @endif
                                             </div>
                                         </div>
+
+                                        <!-- Tampilkan confidence scores jika data detections tersedia -->
+                                        @if(isset($result['detections']) && !empty($result['detections']))
+                                        <div class="mt-3">
+                                            <span class="font-medium">Detail Confidence:</span>
+                                            <div class="mt-1 bg-white p-2 rounded border text-xs">
+                                                @foreach($result['detections'] as $index => $det)
+                                                    @php
+                                                        $label = $det['label'] ?? 'Unknown';
+                                                        // Tentukan warna berdasarkan mutu
+                                                        if (stripos($label, 'mutu 1') !== false) {
+                                                            $mutuwarna = 'text-green-600';
+                                                            $bgwarna = 'bg-green-50';
+                                                            $borderwarna = 'border-green-300';
+                                                        } elseif (stripos($label, 'mutu 2') !== false) {
+                                                            $mutuwarna = 'text-yellow-600';
+                                                            $bgwarna = 'bg-yellow-50';
+                                                            $borderwarna = 'border-yellow-300';
+                                                        } elseif (stripos($label, 'mutu 3') !== false) {
+                                                            $mutuwarna = 'text-red-600';
+                                                            $bgwarna = 'bg-red-50';
+                                                            $borderwarna = 'border-red-300';
+                                                        } else {
+                                                            $mutuwarna = 'text-gray-600';
+                                                            $bgwarna = 'bg-gray-50';
+                                                            $borderwarna = 'border-gray-300';
+                                                        }
+                                                    @endphp
+                                                    <div class="flex justify-between py-1 px-2 mb-1 rounded {{ $bgwarna }} {{ $borderwarna }} border-l-2">
+                                                        <span class="{{ $mutuwarna }} font-medium">{{ $label }} #{{ $index + 1 }}</span>
+                                                        <span class="font-medium 
+                                                            {{ $det['confidence'] >= 0.8 ? 'text-green-700' : 
+                                                               ($det['confidence'] >= 0.65 ? 'text-yellow-700' : 'text-orange-700') }}">
+                                                            {{ number_format($det['confidence'] * 100, 1) }}%
+                                                        </span>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             @endif
@@ -128,14 +136,14 @@
                             <!-- Original Image -->
                             <div>
                                 <p class="text-xs font-medium text-gray-600 mb-1">Gambar Asli:</p>
-                                <img src="{{ $result['imageUrl'] }}" alt="Original Image" class="w-full h-auto rounded border border-gray-300">
+                                <img src="{{ $result['imageUrl'] }}" alt="Original Image" class="w-full h-auto rounded border border-gray-300 cursor-pointer hover:opacity-80 transition-opacity" onclick="openImageModal('{{ $result['imageUrl'] }}', 'Gambar Asli - {{ $result['fileName'] }}')">
                             </div>
                             
                             <!-- Detected Image -->
                             <div>
                                 <p class="text-xs font-medium text-gray-600 mb-1">Hasil Deteksi:</p>
                                 @if(isset($result['imageBase64']))
-                                    <img src="data:image/jpeg;base64,{{ $result['imageBase64'] }}" alt="Detection Result" class="w-full h-auto rounded border border-gray-300">
+                                    <img src="data:image/jpeg;base64,{{ $result['imageBase64'] }}" alt="Detection Result" class="w-full h-auto rounded border border-gray-300 cursor-pointer hover:opacity-80 transition-opacity" onclick="openImageModal('data:image/jpeg;base64,{{ $result['imageBase64'] }}', 'Hasil Deteksi - {{ $result['fileName'] }}')">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center bg-gray-100 rounded border border-gray-300">
                                         <p class="text-gray-500 text-xs">Tidak ada hasil deteksi</p>
@@ -237,12 +245,13 @@
                 </div>
                 <div class="ml-3">
                     <p class="text-blue-700 font-medium">Informasi Penting</p>
-                    <p class="text-blue-600 mt-1">Beberapa telur mungkin tidak terdeteksi dalam gambar-gambar di atas.</p>
+                    <p class="text-blue-600 mt-1">Sistem hanya mendeteksi telur dengan tingkat kepercayaan ≥ 50%. Beberapa telur mungkin tidak terdeteksi dalam gambar-gambar di atas.</p>
                 </div>
             </div>
             <div class="text-blue-600 mt-2 text-sm">
                 <p class="font-medium mb-1">Beberapa penyebab telur tidak terdeteksi:</p>
                 <ul class="list-disc list-inside pl-2 space-y-1">
+                    <li>Tingkat kepercayaan deteksi di bawah 50% (otomatis difilter)</li>
                     <li>Telur tumpang tindih atau saling menutupi</li>
                     <li>Telur berada di bagian tepi gambar</li>
                     <li>Kontras atau pencahayaan pada telur tertentu kurang baik</li>
@@ -258,4 +267,43 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Zoom Gambar -->
+    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 hidden z-50 flex items-center justify-center">
+        <div class="relative max-w-4xl max-h-full mx-4">
+            <button onclick="closeImageModal()" class="absolute top-4 right-4 text-white text-xl bg-gray-800 bg-opacity-75 hover:bg-opacity-100 rounded-full w-8 h-8 flex items-center justify-center z-10">
+                ×
+            </button>
+            <img id="modalImage" src="" alt="" class="max-w-full max-h-screen object-contain rounded">
+            <div id="modalTitle" class="absolute bottom-4 left-4 text-white bg-gray-800 bg-opacity-75 px-3 py-1 rounded text-sm"></div>
+        </div>
+    </div>
+
+    <script>
+        function openImageModal(imageSrc, title) {
+            document.getElementById('modalImage').src = imageSrc;
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('imageModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Tutup modal ketika mengklik area luar gambar
+        document.getElementById('imageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeImageModal();
+            }
+        });
+
+        // Tutup modal dengan tombol ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeImageModal();
+            }
+        });
+    </script>
 @endsection

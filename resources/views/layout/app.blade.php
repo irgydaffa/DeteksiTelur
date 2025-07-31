@@ -9,6 +9,7 @@
     <link rel="icon" type="image/png" href="{{ asset('logo.png') }}">
     <link href="{{ asset('css/theme.css') }}" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    @yield('styles')
 </head>
 
 <body class="bg-gray-100">
@@ -60,6 +61,7 @@
             </main>
         </div>
     </div>
+    @yield('scripts')
 </body>
 
 </html>

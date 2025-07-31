@@ -2,7 +2,67 @@
 
 @section('title', 'Deteksi Mutu Telur')
 
+@section('styles')
+    <style>
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+        }
+
+        .loading-text {
+            color: white;
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+    </style>
+@endsection
+
 @section('content')
+    <!-- Loading overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Sedang memproses deteksi telur...</div>
+        <div class="loading-text text-sm mt-2">Mohon tunggu beberapa saat</div>
+    </div>
+
     <div class="container mx-auto px-4 py-8">
         <div class="max-w-3xl mx-auto">
             <h1 class="text-2xl font-bold mb-6">Deteksi Mutu Telur</h1>
@@ -11,8 +71,11 @@
                 <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded" role="alert">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                    clip-rule="evenodd" />
                             </svg>
                         </div>
                         <div class="ml-3">
@@ -40,7 +103,9 @@
             @endif
 
             <div class="bg-white rounded-lg shadow-lg p-6">
-                <form action="{{ route('detect.process') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+
+                <form action="{{ route('detect.process') }}" method="POST" enctype="multipart/form-data" class="space-y-4"
+                    id="detectionForm">
                     @csrf
                     <div class="mb-4">
                         <label for="images" class="block text-sm font-medium text-gray-700 mb-2">
@@ -49,12 +114,14 @@
 
                         <!-- Custom file input dengan tombol browse yang lebih jelas -->
                         <div class="flex items-center">
-                            <label class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-l cursor-pointer border border-gray-300">
+                            <label
+                                class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-l cursor-pointer border border-gray-300">
                                 <i class="fas fa-folder-open mr-2"></i>Browse
-                                <input type="file" name="images[]" id="images" multiple accept="image/jpeg,image/png,image/jpg" 
-                                    class="hidden">
+                                <input type="file" name="images[]" id="images" multiple
+                                    accept="image/jpeg,image/png,image/jpg" class="hidden">
                             </label>
-                            <span id="file-chosen" class="border border-l-0 border-gray-300 rounded-r py-2 px-3 bg-white text-gray-500 flex-grow">
+                            <span id="file-chosen"
+                                class="border border-l-0 border-gray-300 rounded-r py-2 px-3 bg-white text-gray-500 flex-grow">
                                 No files selected
                             </span>
                         </div>
@@ -77,7 +144,8 @@
                     </div>
 
                     <div class="flex justify-between items-center mt-6">
-                        <a href="{{ route('dashboard') }}" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        <a href="{{ route('dashboard') }}"
+                            class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                             <i class="fas fa-arrow-left mr-1"></i> Kembali ke Dashboard
                         </a>
                         <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -102,8 +170,9 @@
                                 <i class="fas fa-lightbulb mr-1"></i> Catatan Penting:
                             </p>
                             <p class="text-blue-600 text-sm mt-1">
-                                Jika mendeteksi gambar dengan banyak telur dan beberapa telur tidak terdeteksi dengan baik, 
-                                coba lakukan deteksi dengan jumlah telur yang lebih sedikit atau foto telur secara individual 
+                                Jika mendeteksi gambar dengan banyak telur dan beberapa telur tidak terdeteksi dengan baik,
+                                coba lakukan deteksi dengan jumlah telur yang lebih sedikit atau foto telur secara
+                                individual
                                 untuk hasil deteksi yang lebih akurat.
                             </p>
                         </div>
@@ -114,73 +183,109 @@
     </div>
 
     <script>
-        document.getElementById('images').addEventListener('change', function() {
-            const fileInput = this;
-            const fileCount = fileInput.files.length;
-            const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
-            const previewContainer = document.getElementById('preview');
-            const fileChosen = document.getElementById('file-chosen');
+        document.addEventListener('DOMContentLoaded', function () {
+            // File input handler
+            const imagesInput = document.getElementById('images');
+            const detectionForm = document.getElementById('detectionForm');
+            const loadingOverlay = document.getElementById('loadingOverlay');
 
-            previewContainer.innerHTML = '';
-
-            if (this.files.length > 10) {
-                alert('Maksimal 10 gambar yang diperbolehkan.');
-                this.value = '';
-                fileChosen.textContent = 'No files selected';
+            // Pastikan elemen-elemen ada sebelum menambahkan event listener
+            if (!imagesInput || !detectionForm || !loadingOverlay) {
+                console.error('Element not found:', {
+                    imagesInput: !!imagesInput,
+                    detectionForm: !!detectionForm,
+                    loadingOverlay: !!loadingOverlay
+                });
                 return;
             }
 
-            // Update file name display
-            if (this.files.length > 0) {
-                fileChosen.textContent = `${this.files.length} file dipilih`;
-            } else {
-                fileChosen.textContent = 'No files selected';
-            }
+            // Form submission event to show loading overlay
+            detectionForm.addEventListener('submit', function (e) {
+                console.log('Form submission detected');
 
-            // Periksa setiap file
-            let hasInvalidFile = false;
-            let errorMessage = '';
-
-            Array.from(fileInput.files).forEach(file => {
-                const fileName = file.name;
-
-                if (!allowedExtensions.test(fileName)) {
-                    hasInvalidFile = true;
-                    errorMessage = `File '${fileName}' tidak didukung. Hanya file JPG, JPEG, dan PNG yang diperbolehkan.`;
+                // Validate if file is selected
+                if (imagesInput.files.length === 0) {
+                    e.preventDefault();
+                    alert('Silakan pilih gambar terlebih dahulu');
                     return;
                 }
 
-                if (file.size > 10 * 1024 * 1024) { // 10MB in bytes
-                    hasInvalidFile = true;
-                    errorMessage = `File '${fileName}' terlalu besar. Ukuran maksimum adalah 10MB.`;
+                console.log('Showing loading overlay');
+                // Show loading overlay - pastikan display mode sesuai dengan CSS
+                loadingOverlay.style.display = 'flex';
+            });
+
+            // File input change handler
+            imagesInput.addEventListener('change', function () {
+                const fileInput = this;
+                const fileCount = fileInput.files.length;
+                const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+                const previewContainer = document.getElementById('preview');
+                const fileChosen = document.getElementById('file-chosen');
+
+                previewContainer.innerHTML = '';
+
+                if (this.files.length > 10) {
+                    alert('Maksimal 10 gambar yang diperbolehkan.');
+                    this.value = '';
+                    fileChosen.textContent = 'No files selected';
                     return;
                 }
 
-                if (file.type.match('image.*')) {
-                    const reader = new FileReader();
+                // Update file name display
+                if (this.files.length > 0) {
+                    fileChosen.textContent = `${this.files.length} file dipilih`;
+                } else {
+                    fileChosen.textContent = 'No files selected';
+                }
 
-                    reader.onload = function(e) {
-                        const div = document.createElement('div');
-                        div.className = 'relative';
+                // Periksa setiap file
+                let hasInvalidFile = false;
+                let errorMessage = '';
 
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.className = 'h-32 w-full object-cover rounded border border-gray-200';
+                Array.from(fileInput.files).forEach(file => {
+                    const fileName = file.name;
 
-                        div.appendChild(img);
-                        previewContainer.appendChild(div);
+                    if (!allowedExtensions.test(fileName)) {
+                        hasInvalidFile = true;
+                        errorMessage = `File '${fileName}' tidak didukung. Hanya file JPG, JPEG, dan PNG yang diperbolehkan.`;
+                        return;
                     }
 
-                    reader.readAsDataURL(file);
+                    if (file.size > 10 * 1024 * 1024) { // 10MB in bytes
+                        hasInvalidFile = true;
+                        errorMessage = `File '${fileName}' terlalu besar. Ukuran maksimum adalah 10MB.`;
+                        return;
+                    }
+
+                    if (file.type.match('image.*')) {
+                        const reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            const div = document.createElement('div');
+                            div.className = 'relative';
+
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.className = 'h-32 w-full object-cover rounded border border-gray-200';
+
+                            div.appendChild(img);
+                            previewContainer.appendChild(div);
+                        }
+
+                        reader.readAsDataURL(file);
+                    }
+                });
+
+                if (hasInvalidFile) {
+                    alert(errorMessage);
+                    fileInput.value = ''; // Clear file input
+                    fileChosen.textContent = 'No files selected';
+                    previewContainer.innerHTML = '';
                 }
             });
 
-            if (hasInvalidFile) {
-                alert(errorMessage);
-                fileInput.value = ''; // Clear file input
-                fileChosen.textContent = 'No files selected';
-                previewContainer.innerHTML = '';
-            }
+            console.log('All event listeners registered');
         });
     </script>
 @endsection
